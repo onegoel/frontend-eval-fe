@@ -1,0 +1,20 @@
+.eventifyHeader {
+  background-color: black;
+  color: white;
+  z-index: 10;
+  width: 100%;
+  height: 4rem;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 4rem;
+  padding: 1rem 0 1rem 4rem;
+  margin: 0;
+}
+
+.eventifyTitle {
+  font-family: 'Big Shoulders Inline Display';
+  font-weight: 700;
+}

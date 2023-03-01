@@ -1,0 +1,9 @@
+.eventCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 0 auto;
+  row-gap: 5rem;
+  max-width: 1200px;
+  padding: 7rem 5rem;
+}
