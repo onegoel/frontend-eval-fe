@@ -19,6 +19,7 @@ const EventCardsContainer = ({ eventsList }) => {
         .map((event) => (
           <EventCard
             key={event.id}
+            id={event.id}
             name={event.name}
             description={event.description}
             venue={event.venue}

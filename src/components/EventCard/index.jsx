@@ -2,7 +2,7 @@ import './EventCard.css';
 import propTypes from 'prop-types';
 
 const EventCard = ({
-  //   id,
+  // id,
   name,
   description,
   venue,
@@ -42,7 +42,7 @@ const EventCard = ({
               </p>
             </div>
           )}
-          <button>
+          <button className='bookmarkBtn'>
             {isBookmarked ? (
               <i className='fas fa-bookmark' style={{ color: '#EA8282' }}></i>
             ) : (
@@ -65,6 +65,7 @@ EventCard.propTypes = {
   isRegistered: propTypes.bool,
   isBookmarked: propTypes.bool,
   imgUrl: propTypes.string,
+  handleBookmarking: propTypes.func,
 };
 
 export default EventCard;
