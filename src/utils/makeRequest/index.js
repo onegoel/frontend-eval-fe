@@ -11,9 +11,10 @@ export const makeRequest = async (apiEndpoint, dynamicData = {}, navigate) => {
             ...dynamicData
         };
         const { data: response } = await axios(requestDetails);
-        console.log(response.data);
+        // console.log(response.data);
         return response;
     } catch (error) {
+        console.log(error);
         const errorStatus = error.response?.status;
         if (errorStatus) {
             navigate(`${ERROR_ROUTE}/${errorStatus}`);

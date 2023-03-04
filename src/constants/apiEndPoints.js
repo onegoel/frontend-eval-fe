@@ -5,8 +5,8 @@ export const GET_EVENTS_LIST = {
     method: 'get'
 };
 
-export const GET_EVENTS_BY_ID = (eventId) => ({
-    url: `api/events/:${eventId}`,
+export const GET_EVENT_BY_ID = (eventId) => ({
+    url: `api/events/${eventId}`,
     method: 'get'
 });
 
@@ -16,7 +16,7 @@ export const GET_THEMES = {
 };
 
 export const PATCH_EVENT_BY_ID = (eventId, isRegistered = null, isBookmarked = null) => ({
-    url: `api/events/:${eventId}`,
+    url: `api/events/${eventId}`,
     method: 'patch',
     data: {
         isRegistered,

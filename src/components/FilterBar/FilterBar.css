@@ -1,0 +1,18 @@
+.filterBarContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 120px;
+}
+
+.chevronIcon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.chevronIcon:hover {
+  color: darkgray;
+  transition: 0.2s;
+  transform: scale(1.1);
+}

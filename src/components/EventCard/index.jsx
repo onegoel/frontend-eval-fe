@@ -1,33 +1,61 @@
 import './EventCard.css';
 import propTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
+import { useContext, useState } from 'react';
+import { makeRequest } from '../../utils/makeRequest';
+import { PATCH_EVENT_BY_ID } from '../../constants/apiEndPoints';
+import { convertDateTimeFormat } from '../../utils/common';
+import { useNavigate } from 'react-router-dom';
+import { EventContext } from '../../contexts';
 
-const EventCard = ({
-  // id,
-  name,
-  description,
-  venue,
-  datetime,
-  areSeatsAvailable,
-  isRegistered,
-  isBookmarked,
-  imgUrl,
-}) => {
-  const eventCardClickHandler = () => {};
+const EventCard = ({ event, isDetailsPage, handleEventCardClick, handleRegistrationOnClick }) => {
+  const {
+    id,
+    name,
+    description,
+    venue,
+    datetime,
+    areSeatsAvailable,
+    isRegistered,
+    isBookmarked,
+    imgUrl,
+  } = event;
+
+  const navigate = useNavigate();
+
+  const { clickedEventId } = useContext(EventContext);
+  console.log(clickedEventId);
+
+  const [bookmarkState, setBookmarkState] = useState(isBookmarked);
+
+  const handleBookmarking = async (eventId) => {
+    const newBookmarkState = !bookmarkState;
+    await makeRequest(
+      PATCH_EVENT_BY_ID(eventId),
+      {
+        data: { isBookmarked: newBookmarkState },
+      },
+      navigate,
+    );
+    setBookmarkState(newBookmarkState);
+  };
+
   return (
-    <div className='eventCard' onClick={eventCardClickHandler}>
+    <div className='eventCard' onClick={() => handleEventCardClick(id, navigate)}>
       <img src={imgUrl} alt='eventImage' className='eventCardImgContainer' />
       <div className='eventCardDetailsContainer'>
         <div className='eventCardDetails'>
           <p className='eventCardName'>{name.toUpperCase()}</p>
           <p className='eventCardDescription'>{description}</p>
           <p className='eventCardVenue'>VENUE: {venue}</p>
-          <p className='eventCardDate'>DATE: {datetime}</p>
+          <p className='eventCardDate'>DATE: {convertDateTimeFormat(datetime)}</p>
         </div>
-
         <div className='eventCardActions'>
           {isRegistered ? (
             <div className='eventCardStatus'>
-              <i className='fas fa-check-circle' style={{ color: '#A0F3AD' }}></i>
+              <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#A0F3AD' }} />
               <p className='eventCardStatusText' style={{ color: '#A0F3AD' }}>
                 REGISTERED
               </p>
@@ -36,36 +64,70 @@ const EventCard = ({
             <div className='eventCardStatus'></div>
           ) : (
             <div className='eventCardStatus'>
-              <i className='fas fa-xmark-circle' style={{ color: '#ECECAB' }}></i>
+              <FontAwesomeIcon icon={faTimesCircle} style={{ color: '#ECECAB' }} />
               <p className='eventCardStatusText' style={{ color: '#ECECAB' }}>
                 NO SEATS AVAILABLE
               </p>
             </div>
           )}
-          <button className='bookmarkBtn'>
-            {isBookmarked ? (
-              <i className='fas fa-bookmark' style={{ color: '#EA8282' }}></i>
+          <button
+            className='bookmarkBtn'
+            onClick={(e) => {
+              e.stopPropagation();
+              handleBookmarking(id);
+            }}
+          >
+            {bookmarkState ? (
+              <FontAwesomeIcon icon={faBookmark} style={{ color: '#EA8282' }} />
             ) : (
-              <i className='far fa-bookmark' style={{ color: '#EA8282' }}></i>
+              <FontAwesomeIcon icon={farBookmark} style={{ color: '#EA8282' }} />
             )}
           </button>
         </div>
+        {isDetailsPage &&
+          clickedEventId === id &&
+          areSeatsAvailable &&
+          (isRegistered ? (
+            <button
+              className='registerBtn'
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRegistrationOnClick;
+              }}
+            >
+              UNREGISTER
+            </button>
+          ) : (
+            <button
+              className='registerBtn'
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRegistrationOnClick;
+              }}
+            >
+              REGISTER
+            </button>
+          ))}
       </div>
     </div>
   );
 };
 
 EventCard.propTypes = {
-  id: propTypes.number,
-  name: propTypes.string,
-  description: propTypes.string,
-  venue: propTypes.string,
-  datetime: propTypes.string,
-  areSeatsAvailable: propTypes.bool,
-  isRegistered: propTypes.bool,
-  isBookmarked: propTypes.bool,
-  imgUrl: propTypes.string,
-  handleBookmarking: propTypes.func,
+  event: propTypes.shape({
+    id: propTypes.number.isRequired,
+    name: propTypes.string.isRequired,
+    description: propTypes.string.isRequired,
+    venue: propTypes.string.isRequired,
+    datetime: propTypes.string.isRequired,
+    areSeatsAvailable: propTypes.bool.isRequired,
+    isRegistered: propTypes.bool.isRequired,
+    isBookmarked: propTypes.bool.isRequired,
+    imgUrl: propTypes.string.isRequired,
+  }).isRequired,
+  handleEventCardClick: propTypes.func,
+  isDetailsPage: propTypes.bool.isRequired,
+  handleRegistrationOnClick: propTypes.func,
 };
 
 export default EventCard;

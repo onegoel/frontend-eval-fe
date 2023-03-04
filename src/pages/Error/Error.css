@@ -1,0 +1,16 @@
+.errorPageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f5f5f5;
+}
+
+.errorPageMessage {
+  font-family: 'Sofia Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: black;
+}

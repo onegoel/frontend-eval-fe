@@ -5,6 +5,7 @@ body {
   font-size: 20px;
   margin: 0;
   font-family: 'Big Shoulders Inline Display', 'Big Shoulders Text', 'Sofia Sans', sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

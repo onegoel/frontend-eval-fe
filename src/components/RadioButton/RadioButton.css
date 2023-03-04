@@ -1,0 +1,22 @@
+.radioBtnContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0.5rem 0;
+}
+
+.radioBtnContainer label {
+  margin: 0 0.5rem;
+}
+
+.radioBtnIcon {
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.radioBtnIcon:hover {
+  color: darkgray;
+  transition: 0.2s;
+  transform: scale(1.1);
+}

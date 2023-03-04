@@ -1,14 +1,8 @@
 import './EventCardsContainer.css';
 import { EventCard } from '../index.js';
 import propTypes from 'prop-types';
-import moment from 'moment';
 
-const EventCardsContainer = ({ eventsList }) => {
-  const dateTimeConverter = (usaDateTime) => {
-    const indianDateTime = moment.utc(usaDateTime).local(false).format('DD-MM-YYYY, HH:mm');
-    return indianDateTime;
-  };
-
+const EventCardsContainer = ({ eventsList, handleEventCardClick }) => {
   return (
     <div className='eventCardsContainer'>
       {eventsList
@@ -19,15 +13,9 @@ const EventCardsContainer = ({ eventsList }) => {
         .map((event) => (
           <EventCard
             key={event.id}
-            id={event.id}
-            name={event.name}
-            description={event.description}
-            venue={event.venue}
-            datetime={dateTimeConverter(event.datetime)}
-            areSeatsAvailable={event.areSeatsAvailable}
-            isRegistered={event.isRegistered}
-            isBookmarked={event.isBookmarked}
-            imgUrl={event.imgUrl}
+            event={event}
+            handleEventCardClick={handleEventCardClick}
+            isDetailsPage={false}
           />
         ))}
     </div>
@@ -36,6 +24,8 @@ const EventCardsContainer = ({ eventsList }) => {
 
 EventCardsContainer.propTypes = {
   eventsList: propTypes.array,
+  handleEventCardClick: propTypes.func,
+  clickedEventId: propTypes.number,
 };
 
 export default EventCardsContainer;
