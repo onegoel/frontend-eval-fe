@@ -1,8 +1,11 @@
 import './EventCardsContainer.css';
 import { EventCard } from '../index.js';
 import propTypes from 'prop-types';
+import { useContext } from 'react';
+import { EventContext } from '../../contexts';
 
-const EventCardsContainer = ({ eventsList, handleEventCardClick }) => {
+const EventCardsContainer = ({ handleEventCardClick, handleBookmarking }) => {
+  const { eventsList } = useContext(EventContext);
   return (
     <div className='eventCardsContainer'>
       {eventsList
@@ -15,6 +18,7 @@ const EventCardsContainer = ({ eventsList, handleEventCardClick }) => {
             key={event.id}
             event={event}
             handleEventCardClick={handleEventCardClick}
+            handleBookmarking={handleBookmarking}
             isDetailsPage={false}
           />
         ))}
@@ -26,6 +30,7 @@ EventCardsContainer.propTypes = {
   eventsList: propTypes.array,
   handleEventCardClick: propTypes.func,
   clickedEventId: propTypes.number,
+  handleBookmarking: propTypes.func,
 };
 
 export default EventCardsContainer;

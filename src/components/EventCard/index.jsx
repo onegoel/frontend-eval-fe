@@ -4,13 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useContext, useState } from 'react';
-import { makeRequest } from '../../utils/makeRequest';
-import { PATCH_EVENT_BY_ID } from '../../constants/apiEndPoints';
 import { convertDateTimeFormat } from '../../utils/common';
 import { useNavigate } from 'react-router-dom';
 import { EventContext } from '../../contexts';
 
-const EventCard = ({ event, isDetailsPage, handleEventCardClick, handleRegistrationOnClick }) => {
+const EventCard = ({ event, isDetailsPage, handleEventCardClick, handleBookmarking }) => {
   const {
     id,
     name,
@@ -28,19 +26,7 @@ const EventCard = ({ event, isDetailsPage, handleEventCardClick, handleRegistrat
   const { clickedEventId } = useContext(EventContext);
   console.log(clickedEventId);
 
-  const [bookmarkState, setBookmarkState] = useState(isBookmarked);
-
-  const handleBookmarking = async (eventId) => {
-    const newBookmarkState = !bookmarkState;
-    await makeRequest(
-      PATCH_EVENT_BY_ID(eventId),
-      {
-        data: { isBookmarked: newBookmarkState },
-      },
-      navigate,
-    );
-    setBookmarkState(newBookmarkState);
-  };
+  const [bookmarkState, setBookmarkState] = useState(isBookmarked); // eslint-disable-line no-unused-vars
 
   return (
     <div className='eventCard' onClick={() => handleEventCardClick(id, navigate)}>
@@ -74,7 +60,7 @@ const EventCard = ({ event, isDetailsPage, handleEventCardClick, handleRegistrat
             className='bookmarkBtn'
             onClick={(e) => {
               e.stopPropagation();
-              handleBookmarking(id);
+              handleBookmarking(id, bookmarkState, setBookmarkState);
             }}
           >
             {bookmarkState ? (
@@ -90,20 +76,20 @@ const EventCard = ({ event, isDetailsPage, handleEventCardClick, handleRegistrat
           (isRegistered ? (
             <button
               className='registerBtn'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRegistrationOnClick;
-              }}
+              // onClick={(e) => {
+              //   e.stopPropagation();
+              //   handleRegistrationOnClick;
+              // }}
             >
               UNREGISTER
             </button>
           ) : (
             <button
               className='registerBtn'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRegistrationOnClick;
-              }}
+              // onClick={(e) => {
+              //   e.stopPropagation();
+              //   handleRegistrationOnClick;
+              // }}
             >
               REGISTER
             </button>
@@ -127,7 +113,8 @@ EventCard.propTypes = {
   }).isRequired,
   handleEventCardClick: propTypes.func,
   isDetailsPage: propTypes.bool.isRequired,
-  handleRegistrationOnClick: propTypes.func,
+  // handleRegistrationOnClick: propTypes.func,
+  handleBookmarking: propTypes.func,
 };
 
 export default EventCard;
