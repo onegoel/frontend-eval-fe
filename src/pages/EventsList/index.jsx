@@ -1,42 +1,47 @@
+/* eslint-disable no-unused-vars */
 import './EventsList.css';
 import { Header, EventCardsContainer, FilterSearchSection } from '../../components';
 import propTypes from 'prop-types';
-import { makeRequest } from '../../utils/makeRequest';
-import { PATCH_EVENT_BY_ID } from '../../constants/apiEndPoints';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-const EventsList = ({ handleEventCardClick }) => {
-  const navigate = useNavigate();
+const EventsList = ({ buttonClickHandlers }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterOptions, setFilterOptions] = useState({
+    ALL: true,
+    BOOKMARKED: false,
+    REGISTERED: false,
+    'SEATS AVAILABLE': false,
+  });
 
-  const handleBookmarking = async (eventId, bookmarkState, setBookmarkState) => {
-    const newBookmarkState = !bookmarkState;
-    await makeRequest(
-      PATCH_EVENT_BY_ID(eventId),
-      {
-        data: { isBookmarked: newBookmarkState },
-      },
-      navigate,
-    );
-    setBookmarkState(newBookmarkState);
+  const handleSearchQueryChange = (event) => {
+    event && setSearchQuery(event.target.value);
+  };
+
+  const filterAndSearchHandlers = {
+    handleSearchQueryChange,
   };
 
   return (
     <div className='eventsListPageContainer'>
       <Header />
       <div className='eventsListPageContents'>
-        <FilterSearchSection />
-        <EventCardsContainer
-          handleEventCardClick={handleEventCardClick}
-          handleBookmarking={handleBookmarking}
+        <FilterSearchSection
+          filterAndSearchHandlers={filterAndSearchHandlers}
+          searchQuery={searchQuery}
         />
+        <EventCardsContainer buttonClickHandlers={buttonClickHandlers} searchQuery={searchQuery} />
       </div>
     </div>
   );
 };
 
 EventsList.propTypes = {
-  handleEventCardClick: propTypes.func,
   eventsList: propTypes.array,
+  buttonClickHandlers: propTypes.shape({
+    handleBookmarkOnClick: propTypes.func,
+    handleRegistrationOnClick: propTypes.func,
+    handleEventCardClick: propTypes.func,
+  }),
 };
 
 export default EventsList;

@@ -4,8 +4,9 @@ import propTypes from 'prop-types';
 import { useContext } from 'react';
 import { EventContext } from '../../contexts';
 
-const EventCardsContainer = ({ handleEventCardClick, handleBookmarking }) => {
+const EventCardsContainer = ({ buttonClickHandlers, searchQuery }) => {
   const { eventsList } = useContext(EventContext);
+
   return (
     <div className='eventCardsContainer'>
       {eventsList
@@ -13,24 +14,21 @@ const EventCardsContainer = ({ handleEventCardClick, handleBookmarking }) => {
           (eventFetchedBefore, eventFetchedNext) =>
             new Date(eventFetchedBefore.datetime) - new Date(eventFetchedNext.datetime),
         )
+        .filter((event) => event.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .map((event) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            handleEventCardClick={handleEventCardClick}
-            handleBookmarking={handleBookmarking}
-            isDetailsPage={false}
-          />
+          <EventCard key={event.id} event={event} buttonClickHandlers={buttonClickHandlers} />
         ))}
     </div>
   );
 };
 
 EventCardsContainer.propTypes = {
-  eventsList: propTypes.array,
-  handleEventCardClick: propTypes.func,
-  clickedEventId: propTypes.number,
-  handleBookmarking: propTypes.func,
+  buttonClickHandlers: propTypes.shape({
+    handleEventCardClick: propTypes.func,
+    handleBookmarkOnClick: propTypes.func,
+    handleRegistrationOnClick: propTypes.func,
+  }),
+  searchQuery: propTypes.string,
 };
 
 export default EventCardsContainer;
