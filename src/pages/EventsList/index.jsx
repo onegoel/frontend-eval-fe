@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
 import './EventsList.css';
-import { Header, EventCardsContainer, FilterSearchSection } from '../../components';
+import { Header, EventCardsContainer, FilterSearchSection, Footer } from '../../components';
 import propTypes from 'prop-types';
 import { useState, useContext, useEffect } from 'react';
 import { EventContext } from '../../contexts';
 
 const EventsList = ({ buttonClickHandlers }) => {
   const { eventsList } = useContext(EventContext);
+  // console.log('evenl', eventsList);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOption, setSelectedOption] = useState('ALL');
   const [filteredData, setFilteredData] = useState(eventsList);
+
+  const { handleThemeChange } = buttonClickHandlers;
 
   useEffect(() => {
     const filteredData = eventsList.filter((event) => {
@@ -18,13 +21,13 @@ const EventsList = ({ buttonClickHandlers }) => {
       } else if (selectedOption === 'REGISTERED') {
         return event.isRegistered;
       } else if (selectedOption === 'SEATS AVAILABLE') {
-        return event.seatsAvailable;
+        return event.areSeatsAvailable;
       } else {
         return true;
       }
     });
     setFilteredData(filteredData);
-  }, [selectedOption]);
+  }, [selectedOption, eventsList]);
 
   const handleFilterOptionClick = (option) => {
     option && setSelectedOption(option);
@@ -39,10 +42,11 @@ const EventsList = ({ buttonClickHandlers }) => {
     handleFilterOptionClick,
   };
 
-  const filteredEvents = filteredData;
+  console.log(filteredData);
 
   return (
-    <div className='eventsListPageContainer'>
+    <div>
+      {/* {className='eventsListPageContainer'>} */}
       <Header />
       <div className='eventsListPageContents'>
         <FilterSearchSection
@@ -53,9 +57,10 @@ const EventsList = ({ buttonClickHandlers }) => {
         <EventCardsContainer
           buttonClickHandlers={buttonClickHandlers}
           searchQuery={searchQuery}
-          filteredEvents={filteredEvents}
+          filteredEvents={filteredData}
         />
       </div>
+      <Footer handleThemeChange={handleThemeChange} />
     </div>
   );
 };
@@ -66,6 +71,7 @@ EventsList.propTypes = {
     handleBookmarkOnClick: propTypes.func,
     handleRegistrationOnClick: propTypes.func,
     handleEventCardClick: propTypes.func,
+    handleThemeChange: propTypes.func,
   }),
 };
 

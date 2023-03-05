@@ -54,6 +54,7 @@ const FilterSearchSection = ({ searchQuery, filterAndSearchHandlers, selectedOpt
               <RadioButton
                 key={index}
                 label={option}
+                value={option}
                 isChecked={selectedOption === option}
                 radioClickHandler={() => handleFilterOptionClick(option)}
               />
