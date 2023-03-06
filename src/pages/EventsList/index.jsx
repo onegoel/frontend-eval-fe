@@ -7,12 +7,9 @@ import { EventContext } from '../../contexts';
 
 const EventsList = ({ buttonClickHandlers }) => {
   const { eventsList } = useContext(EventContext);
-  // console.log('evenl', eventsList);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOption, setSelectedOption] = useState('ALL');
   const [filteredData, setFilteredData] = useState(eventsList);
-
-  const { handleThemeChange } = buttonClickHandlers;
 
   useEffect(() => {
     const filteredData = eventsList.filter((event) => {
@@ -42,11 +39,10 @@ const EventsList = ({ buttonClickHandlers }) => {
     handleFilterOptionClick,
   };
 
-  console.log(filteredData);
+  // console.log(filteredData);
 
   return (
     <div>
-      {/* {className='eventsListPageContainer'>} */}
       <Header />
       <div className='eventsListPageContents'>
         <FilterSearchSection
@@ -60,7 +56,7 @@ const EventsList = ({ buttonClickHandlers }) => {
           filteredEvents={filteredData}
         />
       </div>
-      <Footer handleThemeChange={handleThemeChange} />
+      <Footer buttonClickHandlers={buttonClickHandlers} />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import './EventCard.css';
 import propTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,19 +23,22 @@ const EventCard = ({ event, buttonClickHandlers, isDetailsPage = false }) => {
 
   const navigate = useNavigate();
 
-  const { clickedEventId } = useContext(EventContext);
+  const { clickedEventId, themeDetails } = useContext(EventContext);
 
-  console.log('butttt', buttonClickHandlers);
+  const [bookmarkState, setBookmarkState] = useState(isBookmarked);
+  const [registrationState, setRegistrationState] = useState(isRegistered);
 
   const { handleEventCardClick, handleBookmarkOnClick, handleRegistrationOnClick } =
     buttonClickHandlers;
 
-  const [bookmarkState, setBookmarkState] = useState(isBookmarked);
-  const [registrationState, setRegistrationState] = useState(isRegistered);
-  const [seatsState, setSeatsState] = useState(areSeatsAvailable); //eslint-disable-line
+  const preferredThemeColour = themeDetails?.preferredThemeColour;
 
   return (
-    <div className='eventCard' onClick={() => handleEventCardClick(id, navigate)}>
+    <div
+      className='eventCard'
+      onClick={() => handleEventCardClick(id, navigate)}
+      style={{ backgroundColor: preferredThemeColour }}
+    >
       <img src={imgUrl} alt='eventImage' className='eventCardImgContainer' />
 
       <div className='eventCardDetailsContainer'>
@@ -55,7 +57,7 @@ const EventCard = ({ event, buttonClickHandlers, isDetailsPage = false }) => {
                 REGISTERED
               </p>
             </div>
-          ) : seatsState ? (
+          ) : areSeatsAvailable ? (
             <div className='eventCardStatus'>
               <p className='eventCardStatusText'></p>
             </div>

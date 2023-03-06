@@ -15,20 +15,20 @@ export const GET_THEMES = {
     method: 'get'
 };
 
+export const PUT_THEME = (preferredThemeId) => ({
+    url: 'api/themes',
+    method: 'put',
+    data: {
+        preferredThemeId
+    }
+});
+
 export const PATCH_EVENT_BY_ID = (eventId, isRegistered = null, isBookmarked = null) => ({
     url: `api/events/${eventId}`,
     method: 'patch',
     data: {
         isRegistered,
         isBookmarked
-    }
-});
-
-export const PUT_THEME = (preferredThemeId) => ({
-    url: 'api/themes',
-    method: 'put',
-    data: {
-        preferredThemeId
     }
 });
 

@@ -1,15 +1,18 @@
+import './App.css';
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import { GET_EVENTS_LIST, PATCH_EVENT_BY_ID } from './constants/apiEndPoints';
+import { GET_EVENTS_LIST, PATCH_EVENT_BY_ID, PUT_THEME } from './constants/apiEndPoints';
 import { ERROR_ROUTE, HOME_ROUTE, EVENT_DETAILS_ROUTE } from './constants/routes';
 import { EventContext } from './contexts';
 import { EventsList, EventDetails, Error } from './pages';
 import { makeRequest } from './utils/makeRequest';
+import { getThemeDetails } from './utils/common';
 
 function App() {
   const [clickedEventId, setClickedEventId] = useState(null);
   const [eventsList, setEventsList] = useState([]);
+  const [themeDetails, setThemeDetails] = useState(null);
+  const [isThemeSaved, setIsThemeSaved] = useState(true);
 
   useEffect(() => {
     makeRequest(GET_EVENTS_LIST)
@@ -20,6 +23,33 @@ function App() {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    getThemeDetails().then((response) => {
+      setThemeDetails(response);
+    });
+  }, []);
+
+  const handleThemeSave = async (navigate) => {
+    const theme = themeDetails?.themes.find((theme) => theme.id === themeDetails.preferredThemeId);
+    await makeRequest(
+      PUT_THEME(theme.id),
+      {
+        data: { preferredThemeId: theme.id },
+      },
+      navigate,
+    );
+    setIsThemeSaved(true);
+  };
+
+  const handleThemeChange = async (theme) => {
+    setThemeDetails({
+      ...themeDetails,
+      preferredThemeId: theme.id,
+      preferredThemeColour: theme.colorHexCode,
+    });
+    setIsThemeSaved(false);
+  };
 
   const handleEventCardClick = (eventId, navigate) => {
     eventId !== null && setClickedEventId(eventId);
@@ -65,13 +95,13 @@ function App() {
     handleBookmarkOnClick: handleBookmarkOnClick,
     handleRegistrationOnClick: handleRegistrationOnClick,
     handleEventCardClick: handleEventCardClick,
+    handleThemeSave: handleThemeSave,
+    handleThemeChange: handleThemeChange,
   };
-
-  // console.log(eventsList);
 
   return (
     <div className='App'>
-      <EventContext.Provider value={{ eventsList, clickedEventId }}>
+      <EventContext.Provider value={{ eventsList, clickedEventId, themeDetails, isThemeSaved }}>
         <BrowserRouter>
           <Routes>
             <Route

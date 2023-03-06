@@ -7,13 +7,22 @@ export const convertDateTimeFormat = (usaDateTime) => {
     return indianDateTime;
 };
 
-export const getThemeColours = async () => {
+export const getThemeDetails = async () => {
     try {
         const response = await makeRequest(GET_THEMES);
+        // console.log(response);
         const { themes, preferredThemeId } = response;
-        const notPreferredThemes = themes !== null && themes.filter(theme => theme.id !== preferredThemeId);
-        const notPreferredThemeColours = notPreferredThemes !== null && notPreferredThemes.map(theme => theme.colorHexCode);
-        return notPreferredThemeColours;
+        const preferredTheme = themes.find(theme => theme.id === preferredThemeId);
+        const { colorHexCode } = preferredTheme;
+        const preferredThemeColour = colorHexCode;
+        // console.log(preferredThemeId);
+        // const allThemes = themes.map(theme => {
+        //     const { colorHexCode } = theme;
+        //     return colorHexCode;
+        // });
+        // console.log(allThemes);
+        console.log(themes);
+        return { themes, preferredThemeColour, preferredThemeId };
     } catch (error) {
         console.log(error);
         return [];
