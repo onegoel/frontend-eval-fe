@@ -42,7 +42,7 @@
 .searchBarAndIconContainer {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   width: 30%;
   margin-inline: 1rem;
@@ -55,7 +55,7 @@
   outline: 0;
   font-size: 1rem;
   font-family: 'Sofia Sans', sans-serif;
-  width: 100%;
+  width: 400px;
   margin-right: 13px;
   padding-left: 13px;
   height: 40px;

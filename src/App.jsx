@@ -2,9 +2,9 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GET_EVENTS_LIST, PATCH_EVENT_BY_ID, PUT_THEME } from './constants/apiEndPoints';
-import { ERROR_ROUTE, HOME_ROUTE, EVENT_DETAILS_ROUTE } from './constants/routes';
+import { ERROR_ROUTE, HOME_ROUTE, EVENT_DETAILS_ROUTE, NOT_FOUND_ROUTE } from './constants/routes';
 import { EventContext } from './contexts';
-import { EventsList, EventDetails, Error } from './pages';
+import { EventsList, EventDetails, Error, NotFound } from './pages';
 import { makeRequest } from './utils/makeRequest';
 import { getThemeDetails } from './utils/common';
 
@@ -43,12 +43,14 @@ function App() {
   };
 
   const handleThemeChange = async (theme) => {
-    setThemeDetails({
-      ...themeDetails,
-      preferredThemeId: theme.id,
-      preferredThemeColour: theme.colorHexCode,
-    });
-    setIsThemeSaved(false);
+    if (theme.preferredThemeId !== themeDetails.preferredThemeId) {
+      setThemeDetails({
+        ...themeDetails,
+        preferredThemeId: theme.id,
+        preferredThemeColour: theme.colorHexCode,
+      });
+      setIsThemeSaved(false);
+    }
   };
 
   const handleEventCardClick = (eventId, navigate) => {
@@ -108,11 +110,12 @@ function App() {
               path={HOME_ROUTE}
               element={<EventsList buttonClickHandlers={buttonClickHandlers} />}
             />
-            <Route path={ERROR_ROUTE} element={<Error />} />
+            <Route path={ERROR_ROUTE(':statusCode')} element={<Error />} />
             <Route
-              path={EVENT_DETAILS_ROUTE(':eventId')}
+              path={`/events/:clickedEventId`}
               element={<EventDetails buttonClickHandlers={buttonClickHandlers} />}
             />
+            <Route path={NOT_FOUND_ROUTE} element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </EventContext.Provider>

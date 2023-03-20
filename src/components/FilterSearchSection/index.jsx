@@ -1,12 +1,15 @@
 import './FilterSearchSection.css';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import propTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import RadioButton from '../RadioButton';
+import { EventContext } from '../../contexts';
 
 const FilterSearchSection = ({ searchQuery, filterAndSearchHandlers, selectedOption }) => {
   const [showFilters, setShowFilters] = useState(false);
+  const { themeDetails } = useContext(EventContext);
+  const preferredThemeColour = themeDetails?.preferredThemeColour;
 
   const { handleSearchQueryChange, handleFilterOptionClick } = filterAndSearchHandlers;
 
@@ -17,7 +20,7 @@ const FilterSearchSection = ({ searchQuery, filterAndSearchHandlers, selectedOpt
   const options = ['ALL', 'BOOKMARKED', 'REGISTERED', 'SEATS AVAILABLE'];
 
   return (
-    <div className='filterAndSearchContainer'>
+    <div className='filterAndSearchContainer' style={{ color: preferredThemeColour }}>
       <div className='filterAndSearchBarContainer'>
         <div className='filterBarContainer'>
           <FontAwesomeIcon icon={faFilter} className='filterIcon' />
